@@ -12,7 +12,7 @@ public class Sample01 {
 
 }
 
-class  ReaderService implements Readable{
+class ReaderService implements Readable{
 
     private ArrayList<String> lines;
 

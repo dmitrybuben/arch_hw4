@@ -140,15 +140,30 @@ class TicketProvider{
         this.paymentProvider = paymentProvider;
     }
 
-    public Collection<Ticket> searchTicket(int clientId, Date date){
-
+    public Collection<Ticket> searchTicket(int clientId, Date date) {
+        // Предусловие
+        if (clientId < 0) {
+            throw new RuntimeException("Неверный идентификатор клиента");
+        }
         Collection<Ticket> tickets = new ArrayList<>();
-        for (Ticket ticket: database.getTickets()) {
+        for (Ticket ticket : database.getTickets()) {
             if (ticket.getCustomerId() == clientId && ticket.getDate().equals(date))
                 tickets.add(ticket);
         }
-        return tickets;
+        // Инвариант
+        checkResult (tickets);
 
+        // Постусловие
+        if (tickets == null) {
+            throw new RuntimeException("Ошибка обращения к базе данных");
+        }
+        return tickets;
+    }
+
+    private void checkResult(Collection<Ticket>tickets){
+        if (tickets.size() == 0) {
+            throw new RuntimeException("Информация о билетах не найдена");
+        }
     }
 
     public boolean buyTicket(int clientId, String cardNo){
